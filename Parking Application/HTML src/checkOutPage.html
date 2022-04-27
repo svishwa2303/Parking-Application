@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Check Out</title>
+<link rel="stylesheet" href="stylesheet.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body style="background-color:#e3e0d8;">
+<header class="site-header">
+<div class="site-identity">
+<center>
+<a href="#"><img src="images/Parking.png" alt="Parking" width="50" height="50"/></a>
+<h1><a href="#">PARKING LOT</a></h1>
+</center>
+</div>
+<a style="float: left; margin-left:2%; margin-right:2%; position: absolute;" href="/parking/home.html" class="bn63">HOME</a>
+</header>
+<br>
+<br>
+<h2 style="text-align:center">CHECK OUT<h2>
+<br>
+<div class="form-center">
+<form id="checkOutForm" style="display: inline-block;">
+  <table class="center table">
+  <tr>
+  <td>Vehicle Number</td>
+  <td><input type="text" id="vehicleNumber"/></td>
+  </tr>
+  <tr>
+  <td>Check Out Time</td>
+  <td><input type="text" id="checkOutTime"/></td>
+  </tr>
+  </table>
+</form>
+</div>
+<a href="#" class="bn62" id="checkOutButton" onclick="formSubmited()">CHECK OUT</a>
+<h4 align="center" id="status"></h4>
+<h5 align="center" id="cost"></h5>
+<script>
+function formSubmited()
+{
+	
+    var costt = document.getElementById('cost');
+	cost.innerHTML = null;
+	//alert("click");
+	//alert($("#vehicleNumber").val());
+	var jsonData = null;
+	var isValid = true;
+    if ( $("#vehicleNumber").val() === '' ){
+        isValid = false;}
+    if ( $("#checkOutTime").val() === '' ){
+        isValid = false;}
+    if(isValid==true){
+    //alert("hi");
+	$.post("/parking/CheckOutServlet",
+    {
+	  choice: "2",
+      vehicleNumber: $("#vehicleNumber").val(),
+	  checkOutTime: $("#checkOutTime").val()
+    },
+    function(data,status){
+	
+	  //alert("hi2");
+	  var status1 = document.getElementById('status');
+	  var costt = document.getElementById('cost');
+      //alert("Data: " + data + "\nStatus: " + status);
+	  jsonData = JSON.parse(data);
+	  status1.innerHTML = jsonData.message;
+	  if(jsonData.status==="1")
+		{
+			//alert("Status returned Success");
+			cost.innerHTML = jsonData.cost;
+			resetForm();
+		}
+    });
+	}
+	else{
+	   alert("Please Enter all the Values");
+	}
+}
+function resetForm() {
+  document.getElementById("checkOutForm").reset();
+}
+</script>
+</body>
+</html>

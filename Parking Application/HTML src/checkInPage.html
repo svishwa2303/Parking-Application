@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Check In</title>
+<link rel="stylesheet" href="stylesheet.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body style="background-color:#e3e0d8;">
+<header class="site-header">
+<div class="site-identity">
+<center>
+<a href="#"><img src="images/Parking.png" alt="Parking" width="50" height="50"/></a>
+<h1><a href="#">PARKING LOT</a></h1>
+</center>
+</div>
+<a style="float: left; margin-left:2%; margin-right:2%; position: absolute;" href="/parking/home.html" class="bn63">HOME</a>
+</header>
+<br>
+<br>
+<h2 style="text-align:center">CHECK IN<h2>
+<br>
+<div class="form-center">
+<form id="checkInForm" style="display: inline-block;">
+  <table class="center table">
+  <tr>
+  <td>Vehicle Number</td>
+  <td><input type="text" id="vehicleNumber"/></td>
+  </tr>
+  <tr>
+  <td>Vehicle Type</td>
+  <td>
+ <form>
+    <label>
+      <input type="radio" name="vehicle" id="Car" value="Car">
+	  <img src="images/Car.png" alt="Parking" width="50" height="50"/>
+    </label>
+    <label>
+      <input type="radio" name="vehicle" id="Bike" value="Bike">
+	  <img src="images/Bike.png" alt="Parking" width="50" height="50"/></td>
+    </label>
+  </form>
+  </td>
+  </tr>
+  <tr>
+  <td>Enter Lot</td>
+  <td><input type="text" id="lot"/></td>
+  </tr>
+  <tr>
+  <td>Check In Time</td>
+  <td><input type="text" id="checkInTime"/></td>
+  </tr>
+  </table>
+</form>  
+</div>
+<a href="#" class="bn62" id="checkInButton" onclick="formSubmited()">CHECK IN</a>
+<h4 align="center" id="status"></h4>
+<script>
+function formSubmited()
+{
+	
+	//alert("hi1");
+	var jsonData = null;
+	var radioValue=$("input[name='vehicle']:checked").val();
+	var isValid = true;
+    if ( $("#vehicleNumber").val() === '' ){
+        isValid = false;}
+	if ( radioValue!=="Car" && radioValue!=="Bike" ){{
+        isValid = false;}
+	if ( $("#lot").val() === '' )
+        isValid = false;}
+	if ( $("#checkInTime").val() === '' ){
+        isValid = false;}
+	if(isValid==true){
+    $.post("/parking/CheckInServlet",
+    {
+	  choice: "1",
+      vehicleNumber: $("#vehicleNumber").val(),
+	  vehicleType: radioValue,
+	  lot: $("#lot").val(),
+	  checkInTime: $("#checkInTime").val()
+    },
+    function(data,status){
+	
+	  //alert("hi2");
+	  var status1 = document.getElementById('status');
+      //alert("Data: " + data + "\nStatus: " + status);
+	  jsonData = JSON.parse(data);
+	  status1.innerHTML = jsonData.message;
+	  if(jsonData.status==="1")
+		{
+			//alert("Status returned Success");
+			resetForm();
+		}
+    });
+	}
+	else{
+	   alert("Please Enter all the Values");
+	}
+	
+	
+}
+function resetForm() {
+  document.getElementById("checkInForm").reset();
+}
+</script>
+</body>
+</html>

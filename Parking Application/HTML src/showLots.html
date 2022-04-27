@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Show Lots</title>
+<link rel="stylesheet" href="stylesheet.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body onload="formSubmited()" style="background-color:#e3e0d8;">
+<header class="site-header">
+<center>
+<div class="site-identity">
+<a href="#"><img src="images/Parking.png" alt="Parking" width="50" height="50"/></a>
+<h1><a href="#">PARKING LOT</a></h1>
+</div>
+</center>
+<a style="float: left; margin-left:2%; margin-right:2%; position: absolute;" href="/parking/home.html" class="bn63">HOME</a>
+</header>
+<br>
+<br>
+<h2 style="text-align:center">SHOW LOTS<h2>
+<br>
+<pre style="text-align:center"> Total no of floors:4</pre>
+<br>
+<form>
+<table class-"table" cellpadding="0" cellspacing="0" class="center table" >
+<tr>
+<th>FLOOR</th>
+<th>CAPACITY</th>
+<th>NO OF VEHICLE</th>
+<th>AVAILABILITY</th>
+</tr>
+<tr>
+<td>A</td>
+<td>10</td>
+<td><p id="A"></p></td>
+<td><p id="A1"></p></td>
+</tr>
+<tr>
+<td>B</td>
+<td>10</td>
+<td><p id="B"></p></td>
+<td><p id="B1"></p></td>
+</tr>
+<tr>
+<td>C</td>
+<td>10</td>
+<td><p id="C"></p></td>
+<td><p id="C1"></p></td>
+</tr>
+<tr>
+<td>D</td>
+<td>10</td>
+<td><p id="D"></p></td>
+<td><p id="D1"></p></td>
+</tr>
+</table>
+</form>
+<script>
+function formSubmited()
+{
+    var val = "3";
+	var jsonData = null;
+	//alert("click2");
+    $.post("/parking/GetSlotsCapacityServlet",
+    {
+	  choice: "4",
+      vehicleNumber: "4",
+    },
+    function(data,status){
+	   //alert("Data: " + data + "\nStatus: " + status);
+	   jsonData = JSON.parse(data);
+	   A.innerHTML = jsonData.A;
+	   A1.innerHTML = jsonData.ACapcitiy;
+	   B.innerHTML = jsonData.B;
+	   B1.innerHTML = jsonData.BCapcitiy;
+	   C.innerHTML = jsonData.C;
+	   C1.innerHTML = jsonData.CCapcitiy;
+	   D.innerHTML = jsonData.D;
+	   D1.innerHTML = jsonData.DCapcitiy;
+    });
+}
+</script>
+</body>
+</html>

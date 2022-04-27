@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Find My Vehicle</title>
+<link rel="stylesheet" href="stylesheet.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+<body style="background-color:#e3e0d8;">
+<header class="site-header">
+<div class="site-identity">
+<center>
+<a href="#"><img src="images/Parking.png" alt="Parking" width="50" height="50"/></a>
+<h1><a href="#">PARKING LOT</a></h1>
+</center>
+</div>
+<a style="float: left; margin-left:2%; margin-right:2%; position: absolute;" href="/parking/home.html" class="bn63">HOME</a>
+</header>
+<br>
+<br>
+<h2 style="text-align:center">FIND MY VEHICLE<h2>
+<br>
+<div class="form-center">
+<form id="findMyVehicleForm" style="display: inline-block;">
+  <table class="center table">
+  <tr>
+  <td>Vehicle Number</td>
+  <td><input type="text" id="vehicleNumber"/></td>
+  </tr>
+  </table>
+</form>  
+</div>
+<br>
+<a href="#" class="bn62" id="checkOutButton" onclick="formSubmitedCall()">FIND</a>
+<br> 
+<h4 align="center" id="status"></h4>   
+<br>                    
+<h4 id="status2" align="center" id="status"></h4> 
+<h4 id="status2Sub" align="center" id="status"></h4> 
+<div id="data-table">
+	<div>
+        <table id="html-data-table" class="center table">
+        </table>    
+	</div>
+	<div>
+	<table id="html-data-table1" class="center table">
+  </table>
+	</div>
+</div>     
+<div id='dvMain'></div>                
+ <script>                                
+function formSubmitedCall()
+{
+	formSubmited();
+} 
+function formSubmited() 
+{
+	// Defaulting innerHTML's             
+	var status1 = document.getElementById('status');
+	status1.innerHTML = "";
+	var mytable = document.getElementById("html-data-table1");  
+	 mytable.innerHTML = "";
+    var mytable = document.getElementById("html-data-table");
+     mytable.innerHTML = "";
+	//alert("click");
+	//alert($("#vehicleNumber").val());
+	var jsonData = null;
+	var isValid = true;
+    if ( $("#vehicleNumber").val() === '' ){
+        isValid = false;}
+    if(isValid==true){
+    $.post("/parking/FindVehicleServlet",
+    {
+	  choice: "3",
+      vehicleNumber: $("#vehicleNumber").val(),
+    },
+    function(data,status){
+	   //alert("Data: " + data + "\nStatus: " + status);
+	   var numbersArray = new Array("one","two","three","four","five");
+	   console.log(data);
+	   jsonData = JSON.parse(data);
+	   if(jsonData.parkingStatus==0 && jsonData.parkingHistoryStatus==0)
+	   {
+			var status1 = document.getElementById('status');
+	        status1.innerHTML = "*Vehicle not found";
+	   }
+	   else if(jsonData.parkingStatus==1)
+	   { 
+	        
+	   }
+	   if(jsonData.INPARKING!=""){
+	   
+	            var mytable = document.getElementById("html-data-table1"); 
+                let newRow = document.createElement("tr");
+                let cell = document.createElement("th");
+                cell.innerText = jsonData.INPARKING;
+                newRow.appendChild(cell);
+                mytable.appendChild(newRow);
+				newRow = document.createElement("tr");
+				cell = document.createElement("td");
+                    cell.innerText = jsonData.INPARKINGVal;
+                    newRow.appendChild(cell);
+                mytable.appendChild(newRow);
+				}
+	   if(jsonData.parkingHistoryStatus==1)
+	   {
+			var jsonArray = jsonData.parkingHistory;
+			$(document).ready(function(){
+				for(var i = 0; i< jsonData.parkingHisCountForFive; i++){
+					var passVal = jsonData.parkingHistory[i];
+					console.log(typeof passVal);
+					console.log(passVal[0]);
+					$("#dvMain1").append("<div class='row'>"+"</div>");  }
+				});
+				
+				renderDataInTheTable(jsonData.parkingHistory,jsonData.parkingHisCountForFive);
+			for(var i=0;i<jsonData.parkingHisCountForFive;i++)
+			{
+				var passVal = jsonData.parkingHistory[i];
+				console.log(typeof passVal);
+				console.log(passVal[0]);
+			}
+	   }
+	   if(status=="success")
+		{
+			//alert("Status returned Success");
+			resetForm();
+		}
+    });
+    }
+	else{
+	   alert("Please Enter all the Values");
+	}
+}
+function resetForm() {
+  document.getElementById("findMyVehicleForm").reset();
+}
+function renderDataInTheTable(todos,k) {
+            var mytable = document.getElementById("html-data-table");
+	            mytable.innerHTML = "";
+                let newRow = document.createElement("tr");
+                let cell = document.createElement("th");
+                cell.innerText = "FLOOR";
+                newRow.appendChild(cell);
+				cell = document.createElement("th");
+                cell.innerText = "DATE";
+                newRow.appendChild(cell);
+				cell = document.createElement("th");
+                cell.innerText = "CHECK IN TIME";
+                newRow.appendChild(cell);
+				cell = document.createElement("th");
+                cell.innerText = "CHECK OUT TIME";
+                newRow.appendChild(cell);
+                mytable.appendChild(newRow);
+			for(var i=0;i<k;i++){
+                let newRow = document.createElement("tr");
+				for(var l=0;l<4;l++){
+                    let cell = document.createElement("td");
+                    cell.innerText = todos[i][l];
+                    newRow.appendChild(cell);
+				}
+                mytable.appendChild(newRow);
+            }
+        }
+</script>
+</body>
+</html>

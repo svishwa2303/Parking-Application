@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Options</title>
+<link rel="stylesheet" href="stylesheet.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body style="background-color:#e3e0d8;">
+<header class="site-header">
+<center>
+<div class="site-identity">
+<a href="#"><img src="images/Parking.png" alt="Parking" width="50" height="50"/></a>
+<h1><a href="#">PARKING LOT</a></h1>
+</div>
+</center>
+<a style="float: left; margin-left:2%; margin-right:2%; position: absolute;" href="/parking/home.html" class="bn63">HOME</a>
+</header>
+<br>
+<br>
+<br>
+<br>
+<center>
+<a href="/parking/checkInPage.html" class="bn63">CHECK IN</a>
+</center>
+<br>
+<center>
+<a href="/parking/checkOutPage.html" class="bn63">CHECK OUT</a>
+</center>
+<br>
+<center>
+<a href="/parking/findMyVehicle.html" class="bn63">FIND VEHICLE</a>
+</center>
+<br>
+<a style="float: right; margin-right:2%;" href="#" class="bn63" onclick="formSubmited1()">PARKING LIST</a>
+<br>
+<br>
+<br>
+<br>
+<a style="float: right; margin-right:2%;" href="#" class="bn63" onclick="formSubmited()">PARKING HISTORY</a>
+<br>
+<br>
+<br>
+<a style="float: right; margin-right:2%;" href="/parking/showLots.html" class="bn63">SHOW LOTS</a>
+<script>
+function formSubmited()
+{
+    //alert("hi");
+	$.post("/parking/CheckInServlet",
+    {
+	  choice: "5",
+      vehicleNumber: $("#vehicleNumber").val(),
+    },
+    function(data,status){
+	
+	  //alert("hi2");
+      //alert("Data: " + data + "\nStatus: " + status);
+	  
+    });
+}
+function formSubmited1()
+{
+    //alert("hi");
+	$.post("/parking/CheckInServlet",
+    {
+	  choice: "6",
+      vehicleNumber: $("#vehicleNumber").val(),
+    },
+    function(data,status){
+	
+	  //alert("hi2");
+      //alert("Data: " + data + "\nStatus: " + status);
+	  
+    });
+}
+function resetForm() {
+  document.getElementById("checkOutForm").reset();
+}
+</script>
+</body>
+</html>
